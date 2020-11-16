@@ -1,73 +1,69 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscriber, Subscription } from 'rxjs';
-import { retry, map, filter } from 'rxjs/operators';
+import { Component, OnDestroy } from '@angular/core';
+import { Observable, interval, Subscription } from 'rxjs';
+import { retry, take, map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-rxjs',
   templateUrl: './rxjs.component.html',
-  styles: []
+  styles: [
+  ]
 })
-export class RxjsComponent implements OnInit , OnDestroy {
+export class RxjsComponent implements OnDestroy {
 
-  subscription: Subscription;
+  public intervalSubs: Subscription;
 
-  constructor() { 
 
-    this.subscription = this.returnObservable().subscribe(
-      numero => console.log('Subs', numero),
-      error => console.log('Error en el Observable', error),
-      ()=> console.log('El Observador termino')
-    );
+  constructor() {
+    
 
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
+    // this.retornaObservable().pipe(
+    //   retry(2)
+    // ).subscribe(
+    //   valor => console.log('Subs:', valor ),
+    //   error => console.warn('Error:', error ),
+    //   () => console.info('Obs terminado')
+    // );
+    this.intervalSubs = this.retornaIntervalo().subscribe( console.log )
 
   }
+  
+  ngOnDestroy(): void {
+    this.intervalSubs.unsubscribe();
+  }
 
-  returnObservable():Observable<any>{
+  retornaIntervalo(): Observable<number> {
 
-    return new Observable<any>( (observer : Subscriber<any>) => {
+    return interval(100)
+            .pipe(
+              // take(10),
+              map( valor => valor + 1), // 0 => 1
+              filter( valor => ( valor % 2 === 0 ) ? true : false ),
+            );
+  }
 
-      let contador = 0;
 
-      let intervalo = setInterval( () => {
-
-        contador ++;
-
-        const salida = {
-          valor : contador
-        };
-
-        observer.next( salida );
+  retornaObservable(): Observable<number> {
+    let i = -1;
+    
+    return new Observable<number>( observer => {
+      
+      const intervalo = setInterval( () => {
         
-        /*if( contador === 3){
-          clearInterval(intervalo);
+        i++;
+        observer.next(i);
+
+        if ( i === 4 ) {
+          clearInterval( intervalo );
           observer.complete();
-        }*/
+        }
 
-        /*if( contador === 2){
-          //clearInterval(intervalo);
-          observer.error('Help');
-        }*/
+        if ( i === 2 ) {
+          observer.error('i llego al valor de 2');
+        }
 
-      }, 1000);
+      }, 1000 )
 
-    }).pipe(
-      map( resp => resp.valor ),
-      filter( (valor, index )=>{
-         if((valor % 2) ===1 ){
-
-          return true;
-
-         }
-         else return false;
-      })
-    );
+    });
 
   }
 

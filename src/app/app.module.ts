@@ -1,34 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-//Modulos
-import { FormsModule } from '@angular/forms';
-import { PagesModule } from '../app/pages/pages.module';
-import { ServiceModule } from './services/service.module';
+// Modulos
+import { AppRoutingModule } from './app-routing.module';
+import { PagesModule } from './pages/pages.module';
+import { AuthModule } from './auth/auth.module';
 
-
-//Rutas
-import { APP_ROUTES } from './app.routes';
-
-//Componentes
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { RegistrerComponent } from './login/registrer.component';
+import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 
-//servicios
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    RegistrerComponent,    
+    NopagefoundComponent,
   ],
   imports: [
     BrowserModule,
-    APP_ROUTES,
+    AppRoutingModule,
     PagesModule,
-    FormsModule,
-    ServiceModule
+    AuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]

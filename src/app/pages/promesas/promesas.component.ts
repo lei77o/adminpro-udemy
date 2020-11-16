@@ -1,44 +1,54 @@
 import { Component, OnInit } from '@angular/core';
 
-
 @Component({
   selector: 'app-promesas',
   templateUrl: './promesas.component.html',
-  styles: []
+  styles: [
+  ]
 })
 export class PromesasComponent implements OnInit {
 
-  constructor() { 
+  constructor() { }
 
-    this.contarTres().then(
-      mensaje => console.log('Termino!', mensaje)
-      ).catch(
-        error => console.log('Error en la promesa', error)
-      );
+  ngOnInit(): void {
+
+    this.getUsuarios().then( usuarios => {
+      console.log(usuarios);
+    })
+
+  
+
+    // const promesa = new Promise( ( resolve, reject ) => {
+
+    //   if ( false ) {
+    //     resolve('Hola Mundo');
+    //   } else {
+    //     reject('Algo salio mal');
+    //   }
+
+
+    // });
+
+    // promesa
+    //   .then( (mensaje) => {
+    //     console.log( mensaje );
+    //   })
+    //   .catch( error => console.log('Error en mi promesa', error ) );
+
+    // console.log('Fin del Init');
 
   }
 
-  ngOnInit() {
-  }
+  getUsuarios() {
 
-  contarTres(): Promise<boolean>{
+    return new Promise( resolve => {
 
-    return new Promise<boolean>( (resolve, reject) => {
-
-      let contador = 0;
-
-      let intervalo = setInterval( ()=> {
-        contador +=1;
-        console.log(contador);
-        if(contador === 3){
-          resolve(true);
-          //reject('Error');
-          clearInterval(intervalo);
-        }
-      }, 1000 );
+      fetch('https://reqres.in/api/users')
+        .then( resp => resp.json() )
+        .then( body => resolve( body.data ) );
 
     });
-    
+
   }
 
 }

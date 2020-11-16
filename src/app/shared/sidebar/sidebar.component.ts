@@ -1,16 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarService } from 'src/app/services/service.index';
+import { Usuario } from 'src/app/models/usuario.model';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styles: []
+  styles: [
+  ]
 })
 export class SidebarComponent implements OnInit {
 
-  constructor( public _sidebar: SidebarService) { }
+  public usuario: Usuario;
 
-  ngOnInit() {
+  menuItems: any[];
+
+  constructor( private sidebarService: SidebarService,
+    private usuarioService: UsuarioService ) {
+    this.menuItems = sidebarService.menu;
+    this.usuario = this.usuarioService.usuario;
+  }
+
+  ngOnInit(): void {
   }
 
 }
