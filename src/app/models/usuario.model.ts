@@ -10,21 +10,20 @@ export class Usuario {
         public password?: string,
         public img?: string,
         public google?: boolean,
-        public role?: string,
+        public role?: 'ADMIN_ROLE' | 'USER_ROLE',
         public uid?: string,
     ) {}
 
-    get imagenUrl () {
-        
-        if( (this.img) ||(this.img.includes('https'))){
+    get imagenUrl() {
+
+        if ( !this.img ) {
+            return `${ base_url }/upload/usuarios/no-image`;
+        } else if ( this.img.includes('https') ) {
             return this.img;
-        }
-        
-        if ( this.img ){
-            return `${ base_url }/uploads/usuarios/${ this.img }`;
-        }
-        else {
-            return `${ base_url }/uploads/usuarios/no-img.png`;
+        } else if ( this.img ) {
+            return `${ base_url }/upload/usuarios/${ this.img }`;
+        } else {
+            return `${ base_url }/upload/usuarios/no-image`;
         }
     }
 }
